@@ -1,18 +1,15 @@
-# Base image
-FROM node:18
-
-# Set working directory
+# 1. Build React
+FROM node:18 AS build
 WORKDIR /app
+COPY frontend ./frontend
+RUN cd frontend && npm install && npm run build
 
-# Copy backend code
+# 2. Backend image
+FROM node:18
+WORKDIR /app
 COPY backend ./backend
+COPY --from=build /app/frontend/build ./backend/frontend/build
 WORKDIR /app/backend
-
-# Install dependencies
 RUN npm install
 
-# Expose port if needed
-EXPOSE 5000
-
-# Start backend
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
