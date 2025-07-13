@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 
-const movieSchema = new mongoose.Schema({
-  title: String,
-  poster: String,
-  downloadLink: String,
-});
+// Define schema based on your existing collection's structure
+const movieSchema = new mongoose.Schema({}, { strict: false });
 
-const collectionName = process.env.MONGO_COLLECTION;
-module.exports = mongoose.model('Movie', movieSchema, collectionName);
+// Use the exact collection name
+module.exports = mongoose.model('RajbharPahadan', movieSchema, 'RajbharPahadan');
+//                ^ model name         ^ schema      ^ actual collection name
