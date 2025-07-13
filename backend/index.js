@@ -23,6 +23,18 @@ app.get('/api/movies', async (req, res) => {
   }
 });
 
+const path = require('path');
+
+// ...rest of your imports and express setup
+
+// Serve static files from React
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// React routing: for any unknown route, return index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
+
 app.listen(5000, () => {
   console.log('🚀 Backend running on http://localhost:5000');
 });
