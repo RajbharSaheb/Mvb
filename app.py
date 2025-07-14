@@ -1,11 +1,12 @@
 import os
 
-# Force reinstall Pyrogram (only first time will take time)
+# Pehle Pyrogram ko uninstall & install kar lo
 os.system("pip uninstall -y pyrogram")
 os.system("pip install pyrogram>=2.0.0 tgcrypto")
 
-from pyrogram import Client
-from pyrogram.enums import ChatType
+# Ab sab imports karo
+import asyncio
+from pyrogram import Client, filters
 from flask import Flask, jsonify, render_template
 from pyrogram.sessions import MemorySession
 import asyncio
