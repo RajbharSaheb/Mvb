@@ -4,7 +4,7 @@ import os
 
 api_id = int(os.environ.get("API_ID", "YOUR_API_ID"))
 api_hash = os.environ.get("API_HASH", "YOUR_API_HASH"))
-channel_username = os.environ.get("CHANNEL_USERNAME", "YOUR_CHANNEL_USERNAME")
+channel_id = os.environ.get("CHANNEL_ID", "YOUR_CHANNEL_ID")
 
 app = Flask(__name__)
 
@@ -18,10 +18,10 @@ def home():
 def get_movies():
     movies = []
     with bot:
-        for message in bot.get_chat_history(channel_username, limit=30):
+        for message in bot.get_chat_history(channel_id, limit=30):
             if message.video or message.document:
                 title = message.caption if message.caption else "No Title"
-                link = f"https://t.me/{channel_username}/{message.message_id}"
+                link = f"https://t.me/{channel_id}/{message.message_id}"
 
                 thumb = "https://via.placeholder.com/300x450.png?text=No+Image"
                 if message.video and message.video.thumbs:
