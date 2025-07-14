@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template
 from pyrogram import Client
+from pyrogram.sessions import MemorySession
 import asyncio
 import os
 
@@ -10,15 +11,13 @@ api_hash = os.environ.get("API_HASH", "YOUR_API_HASH")
 bot_token = os.environ.get("BOT_TOKEN", "YOUR_BOT_TOKEN")
 channel_username = os.environ.get("CHANNEL_USERNAME", "YOUR_CHANNEL_USERNAME_OR_ID")
 
-# Create bot client globally
 bot = Client(
-    "bot_session",
+    session_name=MemorySession(),
     api_id=api_id,
     api_hash=api_hash,
     bot_token=bot_token
 )
 
-# Start the bot client only once (directly call start)
 bot.start()
 
 async def fetch_movies():
