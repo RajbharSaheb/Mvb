@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Movie Site</title>
+  <style>
+    body {
+      background: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .search-box {
+      text-align: center;
+      margin: 20px;
+    }
+    .search-box input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .movie-card {
+      background: #1e1e1e;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    .movie-card:hover {
+      transform: scale(1.05);
+    }
+    .movie-card img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .movie-card h3 {
+      font-size: 16px;
+      padding: 10px;
+    }
+    .movie-card a {
+      display: block;
+      background: #e50914;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">My Movie Site</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search movies...">
+  </div>
+  <div class="grid" id="movies"></div>
+
+  <script>
+    let allMovies = [];
+
+    function renderMovies(movies) {
+      const container = document.getElementById('movies');
+      container.innerHTML = '';
+      movies.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+
+        const img = document.createElement('img');
+        img.src = movie.thumb;
+
+        const title = document.createElement('h3');
+        title.textContent = movie.title;
+
+        const link = document.createElement('a');
+        link.href = movie.link;
+        link.target = '_blank';
+        link.textContent = 'Watch on Telegram';
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(link);
+
+        container.appendChild(card);
+      });
+    }
+
+    fetch('/api/movies')
+      .then(response => response.json())
+      .then(data => {
+        allMovies = data;
+        renderMovies(allMovies);
+      });
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      const filtered = allMovies.filter(movie => movie.title.toLowerCase().includes(query));
+      renderMovies(filtered);
+    });
+  </script>
+</body>
+</html>
