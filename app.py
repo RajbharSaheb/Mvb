@@ -1,8 +1,14 @@
-from flask import Flask, jsonify, render_template
+import os
+
+# Force reinstall Pyrogram (only first time will take time)
+os.system("pip uninstall -y pyrogram")
+os.system("pip install pyrogram>=2.0.0 tgcrypto")
+
 from pyrogram import Client
+from pyrogram.enums import ChatType
+from flask import Flask, jsonify, render_template
 from pyrogram.sessions import MemorySession
 import asyncio
-import os
 
 app = Flask(__name__)
 
