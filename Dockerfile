@@ -1,15 +1,20 @@
-# 1. Build React
-FROM node:18 AS build
-WORKDIR /app
-COPY frontend ./frontend
-RUN cd frontend && npm install && npm run build
+# Base image
+FROM python:3.11-slim
 
-# 2. Backend image
-FROM node:18
+# Working directory
 WORKDIR /app
-COPY backend ./backend
-COPY --from=build /app/frontend/build ./backend/frontend/build
-WORKDIR /app/backend
-RUN npm install
 
-CMD ["node", "index.js"]
+# Copy requirements
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy rest of the code
+COPY . .
+
+# Expose port
+EXPOSE 5000
+
+# Run the app
+CMD ["python", "app.py"]
