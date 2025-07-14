@@ -2,8 +2,8 @@ from flask import Flask, jsonify, render_template
 from pyrogram import Client
 import os
 
-api_id = int(os.environ.get("API_ID", "YOUR_API_ID"))
-api_hash = os.environ.get("API_HASH", "YOUR_API_HASH"))
+api_id = int(os.environ.get("API_ID", "YOUR_API_ID")
+api_hash = os.environ.get("API_HASH", "YOUR_API_HASH")
 channel_id = os.environ.get("CHANNEL_ID", "YOUR_CHANNEL_ID")
 
 app = Flask(__name__)
