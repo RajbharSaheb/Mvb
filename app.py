@@ -10,7 +10,7 @@ api_hash = os.environ.get("API_HASH", "YOUR_API_HASH")
 bot_token = os.environ.get("BOT_TOKEN", "YOUR_BOT_TOKEN")
 channel_username = os.environ.get("CHANNEL_USERNAME", "YOUR_CHANNEL_USERNAME_OR_ID")
 
-# Pyrogram client
+# Create bot client globally
 bot = Client(
     "bot_session",
     api_id=api_id,
@@ -18,26 +18,26 @@ bot = Client(
     bot_token=bot_token
 )
 
+# Start the bot client only once
+loop = asyncio.get_event_loop()
+loop.run_until_complete(bot.start())
+
 async def fetch_movies():
     movies = []
-    async with bot:
-        async for message in bot.get_chat_history(channel_username, limit=50):
-            if message.document or message.video:
-                title = message.caption if message.caption else "No title"
-                file_size = message.document.file_size if message.document else message.video.file_size
-                link = f"https://t.me/{channel_username.lstrip('@')}/{message.message_id}"
-                
-                movies.append({
-                    "title": title,
-                    "file_size": round(file_size / (1024 * 1024), 2),  # MB
-                    "link": link
-                })
+    async for message in bot.get_chat_history(channel_username, limit=50):
+        if message.document or message.video:
+            title = message.caption if message.caption else "No title"
+            file_size = message.document.file_size if message.document else message.video.file_size
+            link = f"https://t.me/{channel_username.lstrip('@').lstrip('-100')}/{message.message_id}"
+            movies.append({
+                "title": title,
+                "file_size": round(file_size / (1024 * 1024), 2),  # MB
+                "link": link
+            })
     return movies
 
 @app.route("/api/movies")
 def api_movies():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
     movies = loop.run_until_complete(fetch_movies())
     return jsonify(movies)
 
