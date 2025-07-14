@@ -18,9 +18,8 @@ bot = Client(
     bot_token=bot_token
 )
 
-# Start the bot client only once
-loop = asyncio.get_event_loop()
-loop.run_until_complete(bot.start())
+# Start the bot client only once (directly call start)
+bot.start()
 
 async def fetch_movies():
     movies = []
@@ -38,6 +37,8 @@ async def fetch_movies():
 
 @app.route("/api/movies")
 def api_movies():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     movies = loop.run_until_complete(fetch_movies())
     return jsonify(movies)
 
